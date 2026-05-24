@@ -1,16 +1,97 @@
-# React + Vite
+# TodoList
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个使用 React + Vite 开发的 TodoList 项目。
 
-Currently, two official plugins are available:
+## 功能
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+* 添加待办事项
+* 删除待办事项
+* 编辑待办事项
+* 完成状态切换
+* 搜索 Todo
+* Todo 筛选
+* 动画效果
+* JSON Server 模拟后端
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 技术栈
 
-## Expanding the ESLint configuration
+* React
+* Vite
+* JavaScript
+* CSS
+* Fetch API
+* JSON Server
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 项目启动
+
+### 安装依赖
+
+```bash
+npm install
+```
+
+### 启动 React 项目
+
+```bash
+npm run dev
+```
+
+默认运行：
+
+```txt
+http://localhost:5173
+```
+
+---
+
+## JSON Server
+
+后端使用 JSON Server 模拟。
+
+启动方式：
+
+```bash
+json-server db.json --port 3001
+```
+
+接口地址：
+
+```txt
+http://localhost:3001/todos
+```
+
+---
+
+## 项目结构
+
+```txt
+src/
+ ├── App.jsx
+ ├── App.css
+ ├── main.jsx
+ └── index.css
+```
+
+---
+
+## 学习内容
+
+这个项目主要用于学习：
+
+* React
+* JSX
+* useState
+* useEffect
+* 前后端交互
+* REST API
+* 前后端分离开发
+
+---
+
+## 作者
+
+nana
