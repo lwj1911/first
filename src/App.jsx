@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import Hello from './Hello.jsx'
 
@@ -61,18 +61,32 @@ function App() {
 
   // ====== Todo 数据 ======
   const [activeList, setActiveList] = useState('todolist1')
-  const API = `http://localhost:3001/${activeList}`
-  const [todos, setTodos] = useState([])
+  const STORAGE_KEY = `todos_${activeList}`
+  const [todos, setTodos] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    return saved ? JSON.parse(saved) : []
+  })
   const [renderText, setRenderText] = useState('')
   const [filter, setFilter] = useState(() => localStorage.getItem('filter') || 'all')
   const [keyword, setKeyword] = useState('')
 
-  const fetchTodos = useCallback(() => {
-    fetch(API)
-      .then(res => res.json())
-      .then(setTodos)
-      .catch(err => console.error('获取数据失败:', err))
-  }, [API])
+  // ---------- localStorage 版本 ----------
+  function saveTodos(newTodos) {
+    setTodos(newTodos)
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newTodos))
+  }
+
+  function loadTodos() {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    setTodos(saved ? JSON.parse(saved) : [])
+  }
+
+  // const fetchTodos = useCallback(() => {
+  //   fetch(API)
+  //     .then(res => res.json())
+  //     .then(setTodos)
+  //     .catch(err => console.error('获取数据失败:', err))
+  // }, [API])
 
   function handleSwitchList(list) {
     setActiveList(list)
@@ -80,7 +94,7 @@ function App() {
     setRenderText('')
   }
 
-  useEffect(() => { fetchTodos() }, [fetchTodos])
+  useEffect(() => { loadTodos() }, [activeList])
 
   // 筛选 + 搜索
   let showTodos = [...todos].reverse().filter(t => t.text.includes(keyword))
@@ -93,62 +107,53 @@ function App() {
   }
 
   // 添加
-  async function addTodo() {
+  function addTodo() {
     const text = renderText.trim()
     if (!text) return
-    try {
-      await fetch(API, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, done: false, createTime: new Date() }),
-      })
+    const newTodo = { id: crypto.randomUUID(), text, done: false, createTime: new Date().toISOString() }
+    saveTodos([...todos, newTodo])
     setKeyword('')
     setRenderText('')
-    fetchTodos()
-  } catch (err) {
-    console.error('添加失败:', err)
   }
-  }
+  // async function addTodo() {
+  //   const text = renderText.trim()
+  //   if (!text) return
+  //   try {
+  //     await fetch(API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ text, done:false, createTime:new Date() }) })
+  //     setKeyword(''); setRenderText(''); fetchTodos()
+  //   } catch(err) { console.error('添加失败:', err) }
+  // }
 
   // 删除
-  async function deleteTodo(id) {
-    try {
-      await fetch(`${API}/${id}`, { method: 'DELETE' })
-      fetchTodos()
-    } catch (err) {
-      console.error('删除失败:', err)
-    }
+  function deleteTodo(id) {
+    saveTodos(todos.filter(t => t.id !== id))
   }
+  // async function deleteTodo(id) {
+  //   try { await fetch(`${API}/${id}`, { method:'DELETE' }); fetchTodos() }
+  //   catch(err) { console.error('删除失败:', err) }
+  // }
 
   // 切换完成
-  async function toggleDone(id, done) {
-    try {
-      await fetch(`${API}/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ done }),
-      })
-      fetchTodos()
-    } catch (err) {
-      console.error('更新失败:', err)
-    }
+  function toggleDone(id, done) {
+    saveTodos(todos.map(t => t.id === id ? { ...t, done } : t))
   }
+  // async function toggleDone(id, done) {
+  //   try { await fetch(`${API}/${id}`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ done }) }); fetchTodos() }
+  //   catch(err) { console.error('更新失败:', err) }
+  // }
 
   // 编辑
-  async function editTodo(id, oldText) {
+  function editTodo(id, oldText) {
     const newText = prompt('请输入新的内容', oldText)
     if (!newText) return
-    try {
-      await fetch(`${API}/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: newText }),
-      })
-      fetchTodos()
-    } catch (err) {
-      console.error('编辑失败:', err)
-    }
+    saveTodos(todos.map(t => t.id === id ? { ...t, text: newText } : t))
   }
+  // async function editTodo(id, oldText) {
+  //   const newText = prompt('请输入新的内容', oldText)
+  //   if (!newText) return
+  //   try { await fetch(`${API}/${id}`, { method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ text:newText }) }); fetchTodos() }
+  //   catch(err) { console.error('编辑失败:', err) }
+  // }
 
   // ====== JSX ======
   return (
