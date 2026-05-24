@@ -1,0 +1,119 @@
+/* ====== 弹窗 ====== */
+.alert-overlay {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px;
+  border: 2px solid #333;
+  z-index: 1000;
+}
+.alert-overlay.display-block {
+  display: block;
+}
+
+/* ====== witch ====== */
+.witch-text {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}
+
+/* witch 诅咒模式 */
+.witch-curse {
+  background: #1a0000 !important;
+  color: red;
+}
+
+
+/* ====== 列表2 ====== */
+.todo-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  max-width: 600px;
+  position: relative;
+}
+
+/* 进入动画 */
+.todo-enter {
+  animation: slideIn 0.5s ease-out;
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 删除动画 */
+.todo-deleting {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease-out;
+}
+
+/* 已完成样式 */
+.todo-done {
+  text-decoration: underline;
+  opacity: 0.5;
+}
+
+/* 按钮组 */
+.todo-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  position: relative;
+}
+
+/* 详细弹窗 */
+.details-wrapper {
+  position: relative;
+}
+.details-popup {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 8px;
+  font-size: 12px;
+  color: #666;
+  background: #fff;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+/* 状态标签 */
+.done-label {
+  margin-left: 4px;
+  font-size: 12px;
+}
+
+/* ====== 下拉菜单 ====== */
+.dropdown-menu {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  gap: 5px;
+}
+.dropdown-menu li {
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  position: relative;
+}
+.dropdown-menu li:hover {
+  background-color: #e0e0e0;
+}
