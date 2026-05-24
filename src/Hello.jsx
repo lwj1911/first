@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 function Hello() {
     const [text, setText] = useState('hello world')
         useEffect(() => {
-            setText('hello react')
+            setText('hello cj')
         })
     return (
         <div>
