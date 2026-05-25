@@ -12,6 +12,11 @@ function App() {
   const [witchDead, setWitchDead] = useState(false)
   const countRef = useRef(0)
 
+  function justClickme() {
+    setAlertMsg('你点击了按钮！！')
+    setShowAlert(true)
+  }
+
   function onWitch() {
     const count = countRef.current
     switch (count) {
@@ -160,7 +165,7 @@ function App() {
     <div className={witchDead ? 'witch-curse' : ''}>
       <h1>我的TodosList</h1>
       
-      <button onClick={onWitch}>Click me!</button>
+      <button onClick={justClickme}>Click me!</button>
 
       {/* witch 按钮 */}
 
