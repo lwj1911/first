@@ -5,7 +5,7 @@ export default function TodoList({ items, onToggle, onDelete, onEdit }) {
     <ul className="todo-list">
       {items.map(todo => (
         <TodoItem
-          key={todo.id}
+          key={todo._id}
           todo={todo}
           onToggle={onToggle}
           onDelete={onDelete}

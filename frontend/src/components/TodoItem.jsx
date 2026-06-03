@@ -7,7 +7,7 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }) {
 
   function handleDelete() {
     setDeleting(true)
-    setTimeout(() => onDelete(todo.id), 300)
+    setTimeout(() => onDelete(todo._id), 300)
   }
 
   return (
@@ -38,12 +38,12 @@ export default function TodoItem({ todo, onToggle, onDelete, onEdit }) {
           )}
         </span>
 
-        <button onClick={() => onEdit(todo.id, todo.text)}>编辑</button>
+        <button onClick={() => onEdit(todo._id, todo.text)}>编辑</button>
 
         <input
           type="checkbox"
           checked={todo.done}
-          onChange={e => onToggle(todo.id, e.target.checked)}
+          onChange={e => onToggle(todo._id, e.target.checked)}
         />
         <span className="done-label">{todo.done ? '已完成' : '未完成'}</span>
       </span>
