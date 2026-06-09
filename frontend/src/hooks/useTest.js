@@ -1,16 +1,16 @@
-import React from 'react';
-import { onTest } from '../services/testService.js';
+import { useState } from 'react'
+import { testService } from '../services/testService.js'
 
 export default function useTest() {
-    const [testText, setTestText] = React.useState('');
+    const [text, setText] = useState('')
+    const [result, setResult] = useState(null)
 
-    async function handleTest() {
-        const text = testText.trim();
-        if (!text) return;
-        const result = await onTest(text);
-        setTestText('');  // 提交后清空输入框
-        return result;
+    const handleTest = async () => {
+        if (!text.trim()) return
+        const data = await testService(text)
+        setResult(data.text)
+        setText('')
     }
 
-    return { testText, setTestText, onTest: handleTest };
+    return { text, setText, result, handleTest }
 }

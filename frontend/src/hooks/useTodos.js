@@ -5,7 +5,7 @@ export default function useTodos() {
   const [activeList, setActiveList] = useState('todolist1')
   const [todos, setTodos] = useState([])
   const [renderText, setRenderText] = useState('')
-  const [filter, setFilter] = useState(() => localStorage.getItem('filter') || 'all')
+  const [filter, setFilter] = useState('all')
   const [keyword, setKeyword] = useState('')
 
   // 从后端加载当前列表的todos
@@ -20,8 +20,8 @@ export default function useTodos() {
     setKeyword('')
     setRenderText('')
   }
+useEffect(() => { loadTodos() }, [activeList])
 
-  useEffect(() => { loadTodos() }, [activeList])
 
   let showTodos = todos.filter(t => t.text.includes(keyword))
   if (filter === 'done') showTodos = showTodos.filter(t => t.done)
@@ -30,7 +30,6 @@ export default function useTodos() {
   // 切换筛选条件（全部/已完成/未完成）
   function changeFilter(f) {
     setFilter(f)
-    localStorage.setItem('filter', f)
   }
 
   // 新增todo到当前列表

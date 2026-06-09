@@ -1,0 +1,193 @@
+/* ====== 主页面布局 ====== */
+.main-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #333;
+}
+
+/* ====== 顶部导航 ====== */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 24px;
+}
+
+.main-header h1 {
+  font-size: 24px;
+  margin: 0;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-logout {
+  padding: 8px 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: white;
+  color: #999;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  color: #e74c3c;
+  border-color: #e74c3c;
+}
+
+/* ====== Todo 输入区 ====== */
+.todo-input-area {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.todo-input-area input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.todo-input-area input:focus {
+  border-color: #667eea;
+}
+
+.todo-input-area button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.todo-input-area button:hover {
+  opacity: 0.9;
+}
+
+/* ====== 切换和筛选（工具栏） ====== */
+.todo-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 16px;
+  background: #f8f9ff;
+  border-radius: 12px;
+  border: 1px solid #e8eaf6;
+}
+
+/* ====== Todo 列表 ====== */
+.todo-list-section {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  overflow: hidden;
+}
+
+.todo-list-section li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f5f5f5;
+  transition: background 0.2s;
+}
+
+.todo-list-section li:last-child {
+  border-bottom: none;
+}
+
+.todo-list-section li:hover {
+  background: #fafafa;
+}
+
+/* ====== 页脚彩蛋区 ====== */
+.main-footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+.main-footer .witch-area {
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.main-footer .love-area {
+  display: inline-block;
+}
+
+.main-footer .love-area button {
+  padding: 8px 20px;
+  border: 1px solid #ffb3c1;
+  border-radius: 20px;
+  background: #fff5f7;
+  color: #e91e63;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.main-footer .love-area button:hover {
+  background: #ffe4e9;
+}
+
+/* ====== 空状态 ====== */
+.todo-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #ccc;
+  font-size: 15px;
+}
+
+.todo-empty span {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* ====== witch 诅咒模式覆盖 ====== */
+.main-page.witch-curse {
+  background: #1a0000;
+  color: red;
+  max-width: none;
+}
+
+.main-page.witch-curse .main-header h1 {
+  -webkit-text-fill-color: red;
+}
+
+.main-page.witch-curse .todo-input-area button {
+  background: red;
+}
+
+.main-page.witch-curse .todo-list-section {
+  background: #2a0000;
+  border-color: #440000;
+}
+
+.main-page.witch-curse .todo-list-section li {
+  border-color: #330000;
+}
+
+.main-page.witch-curse .todo-list-section li:hover {
+  background: #330000;
+}

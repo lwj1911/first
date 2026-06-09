@@ -1,5 +1,15 @@
-// 后端统一 API 前缀
 const BASE = "http://localhost:3000/api";
+
+// AT 存 localStorage（刷新不丢），RT 在 httpOnly cookie 里（JS 读不到，浏览器自动带）
+function getAccessToken() {
+    return localStorage.getItem("accessToken");
+}
+function setAccessToken(t) {
+    localStorage.setItem("accessToken", t);
+}
+export function clearTokens() {
+    localStorage.removeItem("accessToken");
+}
 
 // 注册
 export async function registerUser(username, password) {
@@ -11,12 +21,88 @@ export async function registerUser(username, password) {
     return res.json();
 }
 
-// 登录
+// 登录 → AT 返回在 JSON，RT 自动存进 httpOnly cookie
 export async function loginUser(username, password) {
     const res = await fetch(`${BASE}/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
+        credentials: "include",  // ← 让浏览器接收 cookie
     });
-    return res.json();
+    const json = await res.json();
+    if (json.success && json.data.accessToken) {
+        setAccessToken(json.data.accessToken);
+    }
+    return json;
+}
+
+// AT 过期时用 cookie 里的 RT 换新 AT
+let refreshPromise = null;
+export async function tryRefresh() {
+    if (refreshPromise) {
+        await refreshPromise;
+        return !!getAccessToken();
+    }
+
+    refreshPromise = (async () => {
+        try {
+            const res = await fetch(`${BASE}/users/refresh`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",  // ← 浏览器自动带上 cookie
+            });
+            const json = await res.json();
+            if (json.success) {
+                setAccessToken(json.data.accessToken);
+            } else {
+                clearTokens();
+            }
+        } catch {
+            clearTokens();
+        } finally {
+            refreshPromise = null;
+        }
+    })();
+
+    await refreshPromise;
+    return !!getAccessToken();
+}
+
+// 退出登录
+export async function logoutUser() {
+    await fetch(`${BASE}/users/logout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",  // 带 cookie，后端清掉
+    });
+    clearTokens();
+}
+
+// 通用认证请求
+export async function authFetch(url, options = {}) {
+    const makeHeaders = () => {
+        const h = { "Content-Type": "application/json", ...options.headers };
+        const at = getAccessToken();
+        if (at) h["Authorization"] = `Bearer ${at}`;
+        return h;
+    };
+
+    let res = await fetch(`${BASE}${url}`, {
+        ...options,
+        headers: makeHeaders(),
+        credentials: "include",  // 带上 cookie
+    });
+
+    if (res.status === 401) {
+        const ok = await tryRefresh();
+        if (ok) {
+            res = await fetch(`${BASE}${url}`, {
+                ...options,
+                headers: makeHeaders(),
+                credentials: "include",
+            });
+        }
+    }
+
+    return res;
 }

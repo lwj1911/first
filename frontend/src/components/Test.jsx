@@ -1,15 +1,16 @@
-import React from 'react'
+import useTest from '../hooks/useTest.js'
 
-export default function Test({ testText, setTestText, onTest }) {
+export default function Test() {
+    const { text, setText, result, handleTest } = useTest()
     return (
-       <>   
-        <input
-            type="text"
-            placeholder="请输入内容"
-            value={testText}
-            onChange={(e) => setTestText(e.target.value)}
-        />
-        <button onClick={() => onTest(testText)}>提交</button>
-        </>   
+        <div>
+            <input
+                type="text"
+                placeholder="请输入内容"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+            />
+            <button onClick={handleTest}>测试</button>
+            {result && <p>✅ 提交成功：{result}</p>}        </div>
     )
 }

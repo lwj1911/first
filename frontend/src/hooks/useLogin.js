@@ -1,10 +1,12 @@
 import { useState } from 'react'
-import { registerUser, loginUser } from '../services/userService'
+import { registerUser, loginUser, logoutUser } from '../services/userService.js'
 
 export default function useLogin() {
+  // 页面加载时检查 RT：有 RT 就尝试恢复登录状态
+  const savedUser = localStorage.getItem("currentUser")
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [currentUser, setCurrentUser] = useState(null)
+  const [currentUser, setCurrentUser] = useState(savedUser)
 
   async function login() {
     const usertext = username.trim()
@@ -13,12 +15,12 @@ export default function useLogin() {
       alert('请输入账号和密码')
       return
     }
-    const data = await loginUser(username, password)
-    if (data.error) {
-      alert(data.error)
+    const res = await loginUser(username, password)
+    if (!res.success) {
+      alert(res.message)
     } else {
-      setCurrentUser(data.username)
-      alert('登录成功')
+      setCurrentUser(res.data.username)
+      localStorage.setItem("currentUser", res.data.username)
     }
   }
 
@@ -27,16 +29,18 @@ export default function useLogin() {
     const passtext = password.trim()
     if (!usertext) return
     if (!passtext) return
-    const data = await registerUser(username, password)
-    if (data.error) {
-      alert(data.error)
+    const res = await registerUser(username, password)
+    if (!res.success) {
+      alert(res.message)
     } else {
       alert('注册成功')
     }
   }
 
-  function logout() {
+  async function logout() {
+    await logoutUser()
     setCurrentUser(null)
+    localStorage.removeItem("currentUser")
   }
 
   return { username, password, currentUser, setUsername, setPassword, login, register, logout }

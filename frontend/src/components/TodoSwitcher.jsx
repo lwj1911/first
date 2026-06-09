@@ -11,8 +11,8 @@ export default function TodoSwitcher({ activeList, onSwitch }) {
         {LISTS.map(list => (
           <li
             key={list.key}
+            className={activeList === list.key ? 'active' : ''}
             onClick={() => onSwitch(list.key)}
-            style={{ background: activeList === list.key ? '#d0d0d0' : undefined }}
           >
             {list.label}
           </li>

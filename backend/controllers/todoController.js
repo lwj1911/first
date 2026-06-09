@@ -12,7 +12,6 @@ exports.getTodos = async (req, res) => {
 exports.createTodo = async (req, res) => {
     const list = req.query.list || "todolist1";
     const { text } = req.body;
-
     // 内容不能为空
     if (!text || !text.trim()) {
         return error(res, "待办事项内容不能为空");
