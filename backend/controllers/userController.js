@@ -4,10 +4,14 @@ const { success, error } = require("../utils/response");
 const { signAccessToken, signRefreshToken, verifyToken } = require("../utils/jwt");
 
 // cookie 通用配置：7天，JS 读不到
+// production 判断：Render 上 NODE_ENV=production
+const isProd = process.env.NODE_ENV === "production";
 const COOKIE_OPTIONS = {
-    httpOnly: true,       // JS 无法通过 document.cookie 读取
-    secure: false,        // 本地开发用 HTTP，上线改成 true
-    sameSite: "lax",      // 允许同站 + 顶部导航携带
+    httpOnly: true,                             // JS 读不到，防 XSS
+    secure: isProd,                             // 生产环境只走 HTTPS
+    sameSite: isProd ? "none" : "lax",          // 生产跨域放行，本地同站
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+};
     maxAge: 7 * 24 * 60 * 60 * 1000,  // 7天
 };
 
