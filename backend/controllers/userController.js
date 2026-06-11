@@ -12,8 +12,6 @@ const COOKIE_OPTIONS = {
     sameSite: isProd ? "none" : "lax",          // 生产跨域放行，本地同站
     maxAge: 7 * 24 * 60 * 60 * 1000,
 };
-    maxAge: 7 * 24 * 60 * 60 * 1000,  // 7天
-};
 
 // 注册
 exports.register = async (req, res) => {
