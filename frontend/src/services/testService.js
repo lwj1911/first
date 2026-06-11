@@ -1,4 +1,4 @@
-const BASE= "http://localhost:3000/api";
+const BASE= "https://first-fafk.onrender.com/api";
 
 export async function testService(text) {
     const res = await fetch(`${BASE}/test`,{    

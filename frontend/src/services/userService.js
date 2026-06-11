@@ -1,4 +1,4 @@
-const BASE = "http://localhost:3000/api";
+const BASE = "https://first-fafk.onrender.com/api";
 
 // AT 存 localStorage（刷新不丢），RT 在 httpOnly cookie 里（JS 读不到，浏览器自动带）
 function getAccessToken() {

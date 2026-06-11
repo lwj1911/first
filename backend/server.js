@@ -10,7 +10,19 @@ const auth = require("./middleware/auth");
 const errorHandler = require("./middleware/errorHandler");
 const app = express();
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+        // 允许 localhost（开发）和 vercel（上线）
+        const allowed = [
+            "http://localhost:5173",
+            "http://localhost:3000",
+        ];
+        // vercel 域名或没有 origin 的请求也放行
+        if (!origin || origin.endsWith(".vercel.app") || allowed.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(null, true);  // 临时全放行，开发阶段
+        }
+    },
     credentials: true,
 }));
 app.use(express.json());
