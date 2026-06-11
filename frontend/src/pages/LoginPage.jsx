@@ -1,48 +1,25 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import useLogin from '../hooks/useLogin.js'
-import { tryRefresh } from '../services/userService.js'
 import './LoginPage.css'
 
 export default function LoginPage() {
   const { username, password, currentUser, setUsername, setPassword, login, register } = useLogin()
-  const [checking, setChecking] = useState(true)
   const navigate = useNavigate()
 
-  // 页面打开时：尝试用 cookie 里的 RT 换 AT（静默恢复登录）
+  // 如果已有 currentUser（localStorage 里有），直接跳主页
   useEffect(() => {
-    if (currentUser) {
-      // 已有 currentUser（可能是 localStorage 恢复的），直接尝试刷新 AT
-      tryRefresh().then(ok => {
-        if (ok) {
-          navigate('/main')
-        } else {
-          localStorage.removeItem('currentUser')
-          window.location.reload()
-        }
-        setChecking(false)
-      })
-    } else {
-      setChecking(false)
+    if (localStorage.getItem('currentUser') && localStorage.getItem('accessToken')) {
+      navigate('/main', { replace: true })
     }
-  }, [])
+  }, [navigate])
 
   // 登录成功后跳转
   useEffect(() => {
-    if (!checking && currentUser) {
-      navigate('/main')
+    if (currentUser) {
+      navigate('/main', { replace: true })
     }
-  }, [currentUser, checking, navigate])
-
-  if (checking) {
-    return (
-      <div className="login-page">
-        <div className="login-card">
-          <p>正在验证登录状态...</p>
-        </div>
-      </div>
-    )
-  }
+  }, [currentUser, navigate])
 
   return (
     <div className="login-page">
